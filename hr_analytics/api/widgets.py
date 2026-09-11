@@ -5,7 +5,12 @@ from frappe import _
 
 from hr_analytics.api.workflow import get_workflow_stage_counts
 
-AGGREGATE_SQL = {"Count": "count(*)", "Sum": "sum({0})", "Average": "avg({0})"}
+AGGREGATE_SQL = {"Count": "count(name)", "Sum": "sum({0})", "Average": "avg({0})"}
+# NOTE: "count(name)" not "count(*)" — Frappe's order_by/group_by validator
+# (ORDER_GROUP_PATTERN in frappe.model.db_query) whitelists a strict
+# character set that excludes "*", so "count(*) desc" in order_by throws
+# "Illegal SQL Query". count(name) is equivalent (name is never null) and
+# passes validation.
 
 
 @frappe.whitelist()
@@ -105,14 +110,14 @@ def _aggregate(doctype, filters, aggregate_function, value_field):
 	# value_field is validated against the doctype's real meta fields in
 	# DashboardWidget.validate() before a widget can be saved, so it's safe
 	# to interpolate directly here — it can never be arbitrary user input.
-	fn = AGGREGATE_SQL.get(aggregate_function or "Count", "count(*)")
+	fn = AGGREGATE_SQL.get(aggregate_function or "Count", "count(name)")
 	fn_sql = fn.format(value_field) if "{0}" in fn else fn
 	rows = frappe.get_list(doctype, filters=filters, fields=[f"{fn_sql} as value"])
 	return rows[0].value if rows else 0
 
 
 def _grouped(doctype, filters, group_by_field, aggregate_function, value_field):
-	fn = AGGREGATE_SQL.get(aggregate_function or "Count", "count(*)")
+	fn = AGGREGATE_SQL.get(aggregate_function or "Count", "count(name)")
 	fn_sql = fn.format(value_field) if "{0}" in fn else fn
 	rows = frappe.get_list(
 		doctype,
@@ -126,6 +131,5 @@ def _grouped(doctype, filters, group_by_field, aggregate_function, value_field):
 
 def _call_override(dotted_path, filters):
 	method = frappe.get_attr(dotted_path)
-	if not getattr(method, "is_whitelisted", False):
-		frappe.throw(_("{0} must be a whitelisted method").format(dotted_path))
+	frappe.is_whitelisted(method)
 	return method(filters=filters)
