@@ -1,0 +1,23 @@
+{
+ "content": null,
+ "creation": "2026-09-11 00:00:00",
+ "docstatus": 0,
+ "doctype": "Page",
+ "icon": "ti ti-layout-dashboard",
+ "idx": 0,
+ "modified": "2026-09-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "HR Analytics",
+ "name": "hr-dashboard",
+ "owner": "Administrator",
+ "page_name": "hr-dashboard",
+ "roles": [
+  {"role": "System Manager"},
+  {"role": "HR Manager"},
+  {"role": "HR User"},
+  {"role": "Employee"}
+ ],
+ "standard": "Yes",
+ "system_page": 0,
+ "title": "HR Dashboard"
+}

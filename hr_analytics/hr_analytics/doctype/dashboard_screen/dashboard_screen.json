@@ -1,0 +1,129 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:screen_name",
+ "creation": "2026-09-11 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "screen_name",
+  "title",
+  "icon",
+  "category",
+  "column_break_1",
+  "sort_order",
+  "is_active",
+  "description",
+  "section_break_roles",
+  "roles"
+ ],
+ "fields": [
+  {
+   "fieldname": "screen_name",
+   "fieldtype": "Data",
+   "label": "Screen ID",
+   "reqd": 1,
+   "unique": 1,
+   "description": "Slug used in the URL, e.g. recruitment, leave, executive"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Data",
+   "label": "Icon (Tabler class)",
+   "default": "ti ti-layout-dashboard",
+   "description": "e.g. ti ti-users, ti ti-calendar-time"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category",
+   "options": "Recruitment\nOnboarding\nProbation & Confirmation\nLeave\nAppraisal\nExecutive\nOther",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sort_order",
+   "fieldtype": "Int",
+   "label": "Sort order",
+   "default": "1"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Show on dashboard",
+   "default": "1",
+   "in_list_view": 1,
+   "description": "Untick to hide this screen without deleting its widgets"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "section_break_roles",
+   "fieldtype": "Section Break",
+   "label": "Visible to"
+  },
+  {
+   "fieldname": "roles",
+   "fieldtype": "Table",
+   "label": "Roles",
+   "options": "Has Role",
+   "description": "Leave empty to show to every Desk user who can read the source doctypes. Add roles (e.g. HR Manager, CEO) to restrict."
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "HR Analytics",
+ "name": "Dashboard Screen",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Employee"
+  }
+ ],
+ "sort_field": "sort_order",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

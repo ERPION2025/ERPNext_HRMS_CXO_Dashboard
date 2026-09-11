@@ -1,0 +1,9 @@
+include MANIFEST.in
+include license.txt
+include *.json
+recursive-include hr_analytics *.json
+recursive-include hr_analytics *.css
+recursive-include hr_analytics *.js
+recursive-include hr_analytics *.html
+recursive-include hr_analytics *.md
+recursive-exclude hr_analytics *.pyc

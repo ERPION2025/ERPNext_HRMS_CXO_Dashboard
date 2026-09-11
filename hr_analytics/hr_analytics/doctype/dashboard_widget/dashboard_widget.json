@@ -1,0 +1,213 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{widget_name}-{#####}",
+ "creation": "2026-09-11 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "widget_name",
+  "screen",
+  "widget_type",
+  "column_break_1",
+  "column_span",
+  "sort_order",
+  "is_active",
+  "description",
+  "section_break_source",
+  "source_doctype",
+  "filters",
+  "date_field",
+  "column_break_2",
+  "group_by_field",
+  "aggregate_function",
+  "value_field",
+  "section_break_workflow",
+  "workflow",
+  "section_break_style",
+  "color_theme",
+  "api_override"
+ ],
+ "fields": [
+  {
+   "fieldname": "widget_name",
+   "fieldtype": "Data",
+   "label": "Widget title",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "screen",
+   "fieldtype": "Link",
+   "label": "Screen",
+   "options": "Dashboard Screen",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "widget_type",
+   "fieldtype": "Select",
+   "label": "Widget type",
+   "options": "Number Card\nBar Chart\nDonut Chart\nLine Chart\nTable\nWorkflow Timeline",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_span",
+   "fieldtype": "Select",
+   "label": "Width",
+   "options": "1\n2\n3",
+   "default": "1",
+   "description": "Grid columns this widget takes on the dashboard"
+  },
+  {
+   "fieldname": "sort_order",
+   "fieldtype": "Int",
+   "label": "Sort order",
+   "default": "1"
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Show on dashboard",
+   "default": "1",
+   "in_list_view": 1,
+   "description": "Untick to hide without deleting"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description / caption"
+  },
+  {
+   "fieldname": "section_break_source",
+   "fieldtype": "Section Break",
+   "label": "Data source"
+  },
+  {
+   "fieldname": "source_doctype",
+   "fieldtype": "Link",
+   "label": "Doctype",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "filters",
+   "fieldtype": "Code",
+   "label": "Filters (JSON)",
+   "options": "JSON",
+   "description": "e.g. {\"status\": \"Open\"} — same shape as frappe.db.get_list filters"
+  },
+  {
+   "fieldname": "date_field",
+   "fieldtype": "Data",
+   "label": "Date field",
+   "description": "Fieldname used when the dashboard's global date-range filter is applied, e.g. creation, date_of_joining"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "group_by_field",
+   "fieldtype": "Data",
+   "label": "Group by field",
+   "depends_on": "eval:!([\"Number Card\",\"Workflow Timeline\",\"Table\"].includes(doc.widget_type))",
+   "mandatory_depends_on": "eval:!([\"Number Card\",\"Workflow Timeline\",\"Table\"].includes(doc.widget_type))"
+  },
+  {
+   "fieldname": "aggregate_function",
+   "fieldtype": "Select",
+   "label": "Aggregate",
+   "options": "Count\nSum\nAverage",
+   "default": "Count",
+   "depends_on": "eval:!([\"Workflow Timeline\",\"Table\"].includes(doc.widget_type))"
+  },
+  {
+   "fieldname": "value_field",
+   "fieldtype": "Data",
+   "label": "Value field",
+   "depends_on": "eval:doc.aggregate_function != \"Count\" && !([\"Workflow Timeline\",\"Table\"].includes(doc.widget_type))",
+   "description": "Numeric field to Sum/Average, e.g. agreed_salary"
+  },
+  {
+   "fieldname": "section_break_workflow",
+   "fieldtype": "Section Break",
+   "depends_on": "eval:doc.widget_type == \"Workflow Timeline\""
+  },
+  {
+   "fieldname": "workflow",
+   "fieldtype": "Link",
+   "label": "Workflow",
+   "options": "Workflow",
+   "depends_on": "eval:doc.widget_type == \"Workflow Timeline\"",
+   "description": "Leave blank to auto-detect the active Workflow on the doctype"
+  },
+  {
+   "fieldname": "section_break_style",
+   "fieldtype": "Section Break",
+   "label": "Advanced"
+  },
+  {
+   "fieldname": "color_theme",
+   "fieldtype": "Select",
+   "label": "Color theme",
+   "options": "Neutral\nCategorical\nStatus (good/warn/danger)",
+   "default": "Neutral"
+  },
+  {
+   "fieldname": "api_override",
+   "fieldtype": "Data",
+   "label": "Custom API method (optional)",
+   "description": "Dotted path to a whitelisted method (e.g. hr_analytics.api.recruitment.get_budget_utilization) for aggregations too complex for the generic builder — joins across Job Requisition/Opening/Applicant, leave liability, etc. When set, this is called instead of the generic builder."
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-09-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "HR Analytics",
+ "name": "Dashboard Widget",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Employee"
+  }
+ ],
+ "sort_field": "sort_order",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}
