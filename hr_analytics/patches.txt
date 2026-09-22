@@ -1,3 +1,4 @@
 [pre_model_sync]
 
 [post_model_sync]
+hr_analytics.patches.v1_0.add_budget_ledger_dashboard
