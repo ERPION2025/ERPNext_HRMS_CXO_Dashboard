@@ -7,6 +7,8 @@ SCREENS = [
 	{"screen_name": "leave", "title": "Leave", "icon": "ti ti-calendar-time", "category": "Leave", "sort_order": 4},
 	{"screen_name": "appraisal", "title": "Appraisal", "icon": "ti ti-target-arrow", "category": "Appraisal", "sort_order": 5},
 	{"screen_name": "executive", "title": "Executive", "icon": "ti ti-chart-pie", "category": "Executive", "sort_order": 6},
+	{"screen_name": "budget_ledger", "title": "Budget & Ledger", "icon": "ti ti-report-money", "category": "Budget & Ledger", "sort_order": 7,
+		"roles": ["HR Manager", "CEO / Final Approver", "CAO", "Accounts Manager", "Accounts User"]},
 ]
 
 # Each row: widget_name, screen, widget_type, source_doctype, kwargs
@@ -111,6 +113,36 @@ WIDGETS = [
 		{"api_override": "hr_analytics.api.executive.get_workforce_composition"}),
 	("Budget vs consumed by cost center", "executive", "Bar Chart", "Job Requisition",
 		{"column_span": "2", "api_override": "hr_analytics.api.recruitment.get_budget_utilization"}),
+
+	# ---------------- Budget & Ledger ----------------
+	("Total approved budget", "budget_ledger", "Number Card", "Workforce Plan",
+		{"aggregate_function": "Sum", "value_field": "approved_budget"}),
+	("Total pipeline (committed) budget", "budget_ledger", "Number Card", "Workforce Plan",
+		{"aggregate_function": "Sum", "value_field": "committed_budget"}),
+	("Total consumed budget", "budget_ledger", "Number Card", "Workforce Plan",
+		{"aggregate_function": "Sum", "value_field": "consumed_budget"}),
+	("Total remaining budget", "budget_ledger", "Number Card", "Workforce Plan",
+		{"aggregate_function": "Sum", "value_field": "remaining_budget"}),
+	("Pending ledger postings (total)", "budget_ledger", "Number Card", "Workforce Plan",
+		{"api_override": "hr_analytics.api.budget.get_pending_ledger_postings_total",
+			"description": "Consumed budget not yet reflected by the monthly payroll-accrual posting"}),
+	("Budget: consumed vs remaining", "budget_ledger", "Donut Chart", "Workforce Plan",
+		{"api_override": "hr_analytics.api.budget.get_budget_consumed_vs_remaining"}),
+	("Approved / committed / consumed by department", "budget_ledger", "Bar Chart", "Workforce Plan",
+		{"column_span": "2", "api_override": "hr_analytics.api.budget.get_budget_by_department"}),
+	("Approved / committed / consumed by project", "budget_ledger", "Bar Chart", "Workforce Plan",
+		{"column_span": "2", "api_override": "hr_analytics.api.budget.get_budget_by_project"}),
+	("Approved vs consumed by vendor", "budget_ledger", "Bar Chart", "Job Requisition",
+		{"column_span": "2", "api_override": "hr_analytics.api.budget.get_budget_by_vendor"}),
+	("Approved vs consumed by position", "budget_ledger", "Bar Chart", "Job Requisition",
+		{"column_span": "2", "api_override": "hr_analytics.api.budget.get_budget_by_position"}),
+	("Approved vs consumed by classification", "budget_ledger", "Bar Chart", "Job Requisition",
+		{"column_span": "2", "api_override": "hr_analytics.api.budget.get_budget_by_classification"}),
+	("Pending ledger postings", "budget_ledger", "Table", "Workforce Plan",
+		{"column_span": "3", "api_override": "hr_analytics.api.budget.get_pending_ledger_postings"}),
+	("Ledger postings (Journal Entries)", "budget_ledger", "Table", "Journal Entry",
+		{"column_span": "3", "api_override": "hr_analytics.api.budget.get_ledger_postings",
+			"description": "Most recent Journal Entries — includes the automated monthly payroll-accrual postings"}),
 ]
 
 
@@ -123,7 +155,11 @@ def create_screens():
 	for s in SCREENS:
 		if frappe.db.exists("Dashboard Screen", s["screen_name"]):
 			continue
-		frappe.get_doc({"doctype": "Dashboard Screen", **s}).insert(ignore_permissions=True)
+		screen = dict(s)
+		role_names = screen.pop("roles", None)
+		if role_names:
+			screen["roles"] = [{"role": r} for r in role_names]
+		frappe.get_doc({"doctype": "Dashboard Screen", **screen}).insert(ignore_permissions=True)
 
 
 def create_widgets():

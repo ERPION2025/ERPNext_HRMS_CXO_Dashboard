@@ -44,7 +44,7 @@
    "fieldname": "category",
    "fieldtype": "Select",
    "label": "Category",
-   "options": "Recruitment\nOnboarding\nProbation & Confirmation\nLeave\nAppraisal\nExecutive\nOther",
+   "options": "Recruitment\nOnboarding\nProbation & Confirmation\nLeave\nAppraisal\nExecutive\nBudget & Ledger\nOther",
    "in_list_view": 1,
    "reqd": 1
   },
